@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>ShopBot Ultimate</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.app {
+  width: 450px;
+  height: 800px;
+  background: white;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header */
+.header {
+  background: #4facfe;
+  color: white;
+  text-align: center;
+  padding: 12px;
+  font-weight: bold;
+}
+
+/* Produits */
+.products {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
+
+.product {
+  flex: 1;
+  background: #f1f1f1;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* Panier */
+.cart {
+  padding: 10px;
+  background: #fafafa;
+  font-size: 13px;
+}
+
+button {
+  margin-top: 5px;
+  padding: 6px;
+  border: none;
+  background: #4facfe;
+  color: white;
+  border-radius: 6px;
+}
+
+/* Chat */
+.chat {
+  flex: 1;
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+  <div class="header">🛒 ShopBot Ultimate</div>
+
+  <div class="products">
+    <div class="product" onclick="addToCart('Téléphone',500)">📱 Téléphone</div>
+    <div class="product" onclick="addToCart('PC',1000)">💻 PC</div>
+    <div class="product" onclick="addToCart('Chaussures',100)">👟 Chaussures</div>
+  </div>
+
+  <div class="cart">
+    <div id="cartList"></div>
+    <div id="total"></div>
+
+    <button onclick="pay()">💳 Payer</button>
+    <button onclick="track()">📦 Suivre</button>
+    <button onclick="clearCart()">🗑️ Vider</button>
+  </div>
+
+  <div class="chat">
+    <iframe
+      allow="microphone;"
+      src="https://console.dialogflow.com/api-client/demo/embedded/8b23e153-1915-4bf4-9059-f0716d392ce2">
+    </iframe>
+  </div>
+
+</div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let total = JSON.parse(localStorage.getItem("total")) || 0;
+
+function updateUI(){
+  document.getElementById("cartList").innerHTML = cart.join(", ") || "Panier vide";
+  document.getElementById("total").innerHTML = "Total : " + total + "€";
+}
+
+function save(){
+  localStorage.setItem("cart", JSON.stringify(cart));
+  localStorage.setItem("total", JSON.stringify(total));
+}
+
+function addToCart(name, price){
+  cart.push(name);
+  total += price;
+  save();
+  updateUI();
+  alert(name + " ajouté au panier 🛒");
+}
+
+function pay(){
+  alert("Paiement réussi 💳");
+  cart = [];
+  total = 0;
+  save();
+  updateUI();
+}
+
+function track(){
+  alert("Commande en livraison 📦 ETA: 2 jours");
+}
+
+function clearCart(){
+  cart = [];
+  total = 0;
+  save();
+  updateUI();
+}
+
+updateUI();
+</script>
+
+</body>
+</html>
